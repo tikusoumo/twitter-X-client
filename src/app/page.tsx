@@ -1,3 +1,5 @@
+"use client";
+import toast from "react-hot-toast";
 import Image from "next/image";
 import { FaXTwitter } from "react-icons/fa6";
 import { RiHome7Fill } from "react-icons/ri";
@@ -7,8 +9,13 @@ import { FaRegEnvelope } from "react-icons/fa6";
 import { FaRegBookmark } from "react-icons/fa6";
 import { BsPerson } from "react-icons/bs";
 import { BsThreeDots } from "react-icons/bs";
-import React from "react";
+import React, { useCallback } from "react";
 import Feedcard from "@/components/Feedcard";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { graphqlClient } from "../../clients/api";
+import { verify } from "crypto";
+import { verifyUserGoogleTokenQuery } from "../../graphql/query/user";
+
 
 interface TwitterSidebarButton {
   title: string;
@@ -47,6 +54,23 @@ const TwitterSidebarButtons: TwitterSidebarButton[] = [
 ];
 
 export default function Home() {
+  const handleLoginWithGoogle = useCallback(
+    async (cred: CredentialResponse) => {
+      const googletoken = cred.credential;
+      if (!googletoken) return toast.error("Google login failed!");
+
+      
+      const { verifyGoogleToken } = await graphqlClient.request(
+        verifyUserGoogleTokenQuery,
+        { token: googletoken }
+      );
+
+      toast.success("Google login success!");
+      if (verifyGoogleToken)
+        window.localStorage.setItem("_twitter_token", verifyGoogleToken);
+    },
+    []
+  );
   return (
     <>
       <div className="grid grid-cols-12 gap-2 pt-12 px-56 h-screen w-screen">
@@ -71,8 +95,16 @@ export default function Home() {
         </div>
         <div className="col-span-6 border">
           <Feedcard />
+          <Feedcard />
+          <Feedcard />
+          <Feedcard />
+          <Feedcard />
+          <Feedcard />
         </div>
-        <div className="col-span-3"></div>
+        <div className="col-span-3">
+          <h1>New to Twitter?</h1>
+          <GoogleLogin onSuccess={handleLoginWithGoogle} />
+        </div>
       </div>
     </>
   );

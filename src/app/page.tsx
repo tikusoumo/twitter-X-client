@@ -13,8 +13,10 @@ import React, { useCallback } from "react";
 import Feedcard from "@/components/Feedcard";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { graphqlClient } from "../../clients/api";
-import { verify } from "crypto";
 import { verifyUserGoogleTokenQuery } from "../../graphql/query/user";
+import jwt from 'jsonwebtoken';
+import { useCurrentUser } from "../../hooks/user";
+
 
 
 interface TwitterSidebarButton {
@@ -54,13 +56,20 @@ const TwitterSidebarButtons: TwitterSidebarButton[] = [
 ];
 
 export default function Home() {
+
+
+    const {user} = useCurrentUser();
+    console.log(user);
+    
+
   const handleLoginWithGoogle = useCallback(
     async (cred: CredentialResponse) => {
       const googletoken = cred.credential;
       if (!googletoken) return toast.error("Google login failed!");
 
       
-      const { verifyGoogleToken } = await graphqlClient.request(
+
+      const { verifyGoogleToken }: { verifyGoogleToken: string } = await graphqlClient.request(
         verifyUserGoogleTokenQuery,
         { token: googletoken }
       );
@@ -101,10 +110,10 @@ export default function Home() {
           <Feedcard />
           <Feedcard />
         </div>
-        <div className="col-span-3">
+        {!user && <div className="col-span-3">
           <h1>New to Twitter?</h1>
           <GoogleLogin onSuccess={handleLoginWithGoogle} />
-        </div>
+        </div>}
       </div>
     </>
   );

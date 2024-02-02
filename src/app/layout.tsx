@@ -4,6 +4,9 @@ import "./globals.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "react-hot-toast";
 
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import ClientComponent from "./clientComponent";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -19,10 +22,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <GoogleOAuthProvider clientId="543687300801-cd9t1sbfvndl8j89vviknvn51skaneb5.apps.googleusercontent.com">
-          {children}
-          <Toaster/>
+        <ClientComponent>
+          <GoogleOAuthProvider clientId="543687300801-cd9t1sbfvndl8j89vviknvn51skaneb5.apps.googleusercontent.com">
+            {children}
+            <Toaster />
+            <ReactQueryDevtools />
           </GoogleOAuthProvider>
+        </ClientComponent>
       </body>
     </html>
   );

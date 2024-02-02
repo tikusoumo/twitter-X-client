@@ -158,7 +158,7 @@
             "deprecationReason": null
           },
           {
-            "name": "lastNmae",
+            "name": "lastName",
             "description": null,
             "args": [],
             "type": {
@@ -170,7 +170,7 @@
             "deprecationReason": null
           },
           {
-            "name": "profileImageURL",
+            "name": "profileImageUrl",
             "description": null,
             "args": [],
             "type": {

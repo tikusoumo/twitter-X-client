@@ -8,7 +8,7 @@ export const useCurrentUser = () => {
         {
             queryKey: ["current-user"],
           
-           //ts-ignore
+         
             queryFn: () => graphqlClient.request(getCurrentUserQuery)
         }
     );

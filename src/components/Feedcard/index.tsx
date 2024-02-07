@@ -5,6 +5,7 @@ import { FaRetweet } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
 import { LuBarChart2 } from "react-icons/lu";
 import { PiUploadSimpleBold } from "react-icons/pi";
+import { Tweet } from "../../../gql/graphql";
 
 const TwitterFeedButtons: TwitterFeedButton[] = [
   {
@@ -27,41 +28,46 @@ const TwitterFeedButtons: TwitterFeedButton[] = [
     icon: <PiUploadSimpleBold />,
     label: "Upload",
   },
-]
+];
 
 interface TwitterFeedButton {
   icon: React.ReactNode;
   label: string;
 }
+interface FeedCardProps{
+  data: Tweet;
 
-
-const Feedcard: React.FC = () => {
+}
+const Feedcard: React.FC<FeedCardProps> = (props) => {
+  const {data} = props;
   return (
-    <div className="grid grid-cols-12 gap-4 border-r-0 border-l-0 border-t-0 border p-4 ">
+    <div className="grid grid-cols-12 gap-4 border-t-0 border border-gray-700 p-4 hover:bg-gray-900 cursor-pointer ">
       <div className="col-span-1">
-        <Image
+        {data.author.profileImageUrl && <Image
           className="rounded-full"
-          src="https://avatars.githubusercontent.com/u/71843974?v=4"
+          src={data.author.profileImageUrl}
           alt="profile-image"
           height={50}
           width={50}
-        />
+        />}
       </div>
       <div className="col-span-11  ">
-        <h5 className="font-bold">Soumojit Datta</h5>
+        <h5 className="font-bold">{data.author.firstName} {data.author.lastName}</h5>
         <p className="semi-bold">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis
-          excepturi neque placeat.
+          {data.content}
         </p>
       </div>
       <div className="col-span-12 flex justify-around text-xl mt-2 cursor-pointer">
         {TwitterFeedButtons.map((button, index) => (
-          <div key={index} className="p-4 hover:bg-gray-800 rounded-full hover:text-sky-500 transition-all">
-
-          <div  className="flex items-center  ">
-            {button.icon}
-            
-          </div>
+          <div
+            key={index}
+            className={`p-4 ${
+              index !== 2
+                ? "hover:bg-gray-800 hover:text-sky-500"
+                : "hover:bg-red-500 hover:bg-opacity-20 hover:text-red-600"
+            } rounded-full  transition-all`}
+          >
+            <div className="flex items-center  ">{button.icon}</div>
           </div>
         ))}
       </div>

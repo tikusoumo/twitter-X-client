@@ -57,11 +57,11 @@ const Feedcard: React.FC<FeedCardProps> = (props) => {
           {data.content}
         </p>
       </div>
-      <div className="col-span-12 flex justify-around text-xl mt-2 cursor-pointer">
+      <div className="col-span-12 flex justify-around text-sm sm:text-xl mt-2 cursor-pointer">
         {TwitterFeedButtons.map((button, index) => (
           <div
             key={index}
-            className={`p-4 ${
+            className={`p-2 sm:p-4 ${
               index !== 2
                 ? "hover:bg-gray-800 hover:text-sky-500"
                 : "hover:bg-red-500 hover:bg-opacity-20 hover:text-red-600"

@@ -3,8 +3,7 @@ import { graphqlClient } from "../clients/api";
 import { getAllTweetsQuery } from "../graphql/query/tweet";
 import { CreateTweetInput } from "../gql/graphql";
 import { createTweetMutation } from "../graphql/mutation/tweet";
-import toast from "react-hot-toast";
-import { gql } from "graphql-request";
+import { toast } from "sonner";
 
 export const useCreateTweet = () => {
   const queryClient = useQueryClient();
@@ -14,7 +13,6 @@ export const useCreateTweet = () => {
       graphqlClient.request(createTweetMutation, { payload }),
     onMutate: (payload) => toast.loading("Creating tweet...", { id: "1" }),
     onSuccess: async (payload) => {
-      
       await queryClient.invalidateQueries({ queryKey: ["all-tweets"] });
       toast.success("Tweet created successfully", { id: "1" });
     },

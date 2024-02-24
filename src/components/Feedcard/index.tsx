@@ -6,6 +6,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { LuBarChart2 } from "react-icons/lu";
 import { PiUploadSimpleBold } from "react-icons/pi";
 import { Tweet } from "../../../gql/graphql";
+import Link from "next/link";
 
 const TwitterFeedButtons: TwitterFeedButton[] = [
   {
@@ -41,8 +42,9 @@ interface FeedCardProps{
 const Feedcard: React.FC<FeedCardProps> = (props) => {
   const {data} = props;
   return (
-    <div className="grid grid-cols-12 gap-4 border-t-0 border border-gray-700 p-4 hover:bg-gray-900 cursor-pointer ">
+    <div className="grid grid-cols-12 gap-4 border-t-0 border border-gray-700 p-4 hover:bg-gray-900 ">
       <div className="col-span-1">
+      <Link href={`/${data.author?.id}`}>
         {data.author.profileImageUrl && <Image
           className="rounded-full"
           src={data.author.profileImageUrl}
@@ -50,9 +52,13 @@ const Feedcard: React.FC<FeedCardProps> = (props) => {
           height={50}
           width={50}
         />}
+        </Link>
       </div>
       <div className="col-span-11  ">
-        <h5 className="font-bold">{data.author.firstName} {data.author.lastName}</h5>
+        <h5 className="font-bold"><Link href={`/${data.author?.id}`}>
+        {data.author.firstName} {data.author.lastName}
+        </Link>
+        </h5>
         <p className="semi-bold">
           {data.content}
         </p>

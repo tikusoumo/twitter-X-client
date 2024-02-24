@@ -1,3 +1,4 @@
+"use client";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import React, { useCallback } from "react";
 import {
@@ -15,6 +16,7 @@ import { graphqlClient } from "../../../clients/api";
 import { verifyUserGoogleTokenQuery } from "../../../graphql/query/user";
 import { AnimatedTooltip } from "../ui/animated-tooltip";
 import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 interface TwitterLayoutProps {
   children: React.ReactNode;
@@ -25,18 +27,6 @@ interface TwitterButton {
   link: string;
 }
 
-const people = [
-  {
-    id: 1,
-    name: "John Doe",
-    designation: "Software Engineer",
-    image:
-      "https://images.unsplash.com/photo-1707193087908-41fdec215482?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-];
-
-
-
 const TwitterLayout: React.FC<TwitterLayoutProps> = (props) => {
   const { user } = useCurrentUser();
 
@@ -44,37 +34,37 @@ const TwitterLayout: React.FC<TwitterLayoutProps> = (props) => {
     {
       title: "Home",
       icon: <RiHome7Fill />,
-      link: "/"
+      link: "/",
     },
     {
       title: "Explore",
       icon: <FaHashtag />,
-      link: "/"
+      link: "/",
     },
     {
       title: "Notifications",
       icon: <GrNotification />,
-      link: "/"
+      link: "/",
     },
     {
       title: "Messages",
       icon: <FaRegEnvelope />,
-      link: "/"
+      link: "/",
     },
     {
       title: "Bookmarks",
       icon: <FaRegBookmark />,
-      link: "/"
+      link: "/",
     },
     {
       title: "Profile",
       icon: <BsPerson />,
-      link: `/${user?.id}`
+      link: `/${user?.id}`,
     },
     {
       title: "More",
       icon: <BsThreeDots />,
-      link: "/"
+      link: "/",
     },
   ];
 
@@ -92,12 +82,12 @@ const TwitterLayout: React.FC<TwitterLayoutProps> = (props) => {
       if (verifyGoogleToken)
         window.localStorage.setItem("_twitter_token", verifyGoogleToken);
     },
-    [verifyUserGoogleTokenQuery]
+    []
   );
 
   return (
     <>
-      <div className="grid grid-cols-12  h-screen w-screen">
+      <div className="grid grid-cols-12  h-screen w-screen overflow-x-hidden">
         <div className="col-span-2 sm:col-span-3 flex sm:justify-end  ">
           <div className="pr-4">
             <div className=" text-3xl hover:bg-gray-900 rounded-full w-fit  p-4 transition-all">
@@ -133,6 +123,7 @@ const TwitterLayout: React.FC<TwitterLayoutProps> = (props) => {
                   },
                 ]}
               />
+             
             </div>
           </div>
         </div>

@@ -1,39 +1,34 @@
 "use client";
 import TwitterLayout from "@/components/Layout/TwitterLayout";
 import { FaArrowLeft } from "react-icons/fa";
-import type { NextPage,GetServerSideProps } from "next";
+import type { NextPage, GetServerSideProps } from "next";
 import Image from "next/image";
 
 import { useCurrentUser } from "../../../hooks/user";
 import Feedcard from "@/components/Feedcard";
 import { Tweet, User } from "../../../gql/graphql";
-import { useRouter } from "next/router";
-import { GetServerComponent } from "@/app/[id]/page";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useEffect } from "react";
 import Tweets from "../Tweets";
 
-
-interface ServerProps{
-  userInfo?: User
+interface ServerProps {
+  userInfo?: User;
 }
 
-const UserProfilePage: NextPage<ServerProps> = (props:ServerProps) => {
- 
-  const {user} = useCurrentUser();
- 
+const UserProfilePage: NextPage<ServerProps> = (props: ServerProps) => {
   const userInfo = props.userInfo;
-
-  console.log(userInfo);
-  // const router = useRouter();
   return (
     <TwitterLayout>
       <div className=" ">
         <nav className="flex items-center gap-4 p-4">
           <FaArrowLeft />
           <div className="">
-            <h1 className="text-2xl">{userInfo?.firstName + " " + userInfo?.lastName}</h1>
-            <h1 className="text-xl text-gray-400 ">{userInfo?.tweets?.length}</h1>
+            <h1 className="text-2xl">
+              {userInfo?.firstName + " " + userInfo?.lastName}
+            </h1>
+            <h1 className="text-xl text-gray-400 ">
+              {userInfo?.tweets?.length}
+            </h1>
           </div>
         </nav>
         <div className=" relative w-full h-56 object-cover ">
@@ -50,7 +45,7 @@ const UserProfilePage: NextPage<ServerProps> = (props:ServerProps) => {
         </div>
         <div className="relative ">
           <Avatar className="w-24 h-24 absolute left-[50%] -translate-x-[50%] -top-10  md:translate-x-10 md:-translate-y-10 md:left-0 md:top-0 transition-all ease-in-out border-4 border-black">
-            <AvatarImage src={ userInfo?.profileImageUrl as string} />
+            <AvatarImage src={userInfo?.profileImageUrl as string} />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </div>
@@ -63,10 +58,5 @@ const UserProfilePage: NextPage<ServerProps> = (props:ServerProps) => {
     </TwitterLayout>
   );
 };
-
-
-
-
-
 
 export default UserProfilePage;

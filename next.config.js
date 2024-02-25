@@ -15,7 +15,13 @@ const nextConfig = {
             protocol: 'https',
             hostname: 'images.unsplash.com',
             port: '',
-        }],
+        },
+        {
+            protocol: 'https',
+            hostname: 'twitter-soumojit.s3.ap-south-1.amazonaws.com',
+            port: '',
+        }
+    ],
     }
 }
 

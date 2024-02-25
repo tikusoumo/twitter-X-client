@@ -16,7 +16,7 @@ interface PageProps {
 const UserProfile: NextPage<PageProps> = async ({params}) => {
   
   const userInfo = await GetServerComponent(params);
-  console.log(userInfo);
+
 
 
   return (
@@ -26,7 +26,7 @@ const UserProfile: NextPage<PageProps> = async ({params}) => {
   );
 };
 
-export const GetServerComponent = async (params:{id:string}) => {
+const GetServerComponent = async (params:{id:string}) => {
   // Fetch some data
   const id = params.id;
 

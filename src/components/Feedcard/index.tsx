@@ -35,33 +35,33 @@ interface TwitterFeedButton {
   icon: React.ReactNode;
   label: string;
 }
-interface FeedCardProps{
+interface FeedCardProps {
   data: Tweet;
-
 }
 const Feedcard: React.FC<FeedCardProps> = (props) => {
-  const {data} = props;
+  const { data } = props;
   return (
     <div className="grid grid-cols-12 gap-4 border-t-0 border border-gray-700 p-4 hover:bg-gray-900 ">
       <div className="col-span-1">
-      <Link href={`/${data.author?.id}`}>
-        {data.author.profileImageUrl && <Image
-          className="rounded-full"
-          src={data.author.profileImageUrl}
-          alt="profile-image"
-          height={50}
-          width={50}
-        />}
+        <Link href={`/${data.author?.id}`}>
+          {data.author.profileImageUrl && (
+            <Image
+              className="rounded-full"
+              src={data.author.profileImageUrl}
+              alt="profile-image"
+              height={50}
+              width={50}
+            />
+          )}
         </Link>
       </div>
       <div className="col-span-11  ">
-        <h5 className="font-bold"><Link href={`/${data.author?.id}`}>
-        {data.author.firstName} {data.author.lastName}
-        </Link>
+        <h5 className="font-bold">
+          <Link href={`/${data.author?.id}`}>
+            {data.author.firstName} {data.author.lastName}
+          </Link>
         </h5>
-        <p className="semi-bold">
-          {data.content}
-        </p>
+        <p className="semi-bold">{data.content}</p>
       </div>
       <div className="col-span-12 flex justify-around text-sm sm:text-xl mt-2 cursor-pointer">
         {TwitterFeedButtons.map((button, index) => (

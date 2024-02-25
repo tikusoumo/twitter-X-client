@@ -17,9 +17,11 @@ import { verifyUserGoogleTokenQuery } from "../../../graphql/query/user";
 import { AnimatedTooltip } from "../ui/animated-tooltip";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Tweet } from "../../../gql/graphql";
 
 interface TwitterLayoutProps {
   children: React.ReactNode;
+  
 }
 interface TwitterButton {
   title: string;

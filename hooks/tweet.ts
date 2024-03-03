@@ -9,7 +9,7 @@ export const useCreateTweet = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (payload: CreateTweetInput) =>
-      // @ts-ignore
+      
       graphqlClient.request(createTweetMutation, { payload }),
     onMutate: (payload) => toast.loading("Creating tweet...", { id: "1" }),
     onSuccess: async (payload) => {

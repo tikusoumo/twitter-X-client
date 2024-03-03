@@ -16,12 +16,9 @@ import { graphqlClient } from "../../../clients/api";
 import { verifyUserGoogleTokenQuery } from "../../../graphql/query/user";
 import { AnimatedTooltip } from "../ui/animated-tooltip";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Tweet } from "../../../gql/graphql";
 
 interface TwitterLayoutProps {
   children: React.ReactNode;
-  
 }
 interface TwitterButton {
   title: string;
@@ -89,9 +86,9 @@ const TwitterLayout: React.FC<TwitterLayoutProps> = (props) => {
 
   return (
     <>
-      <div className="grid grid-cols-12  h-screen w-screen overflow-x-hidden">
+      <div className="grid grid-cols-12  h-screen w-screen overflow-x-hidden ">
         <div className="col-span-2 sm:col-span-3 flex sm:justify-end  ">
-          <div className="pr-4">
+          <div className="pr-4 ">
             <div className=" text-3xl hover:bg-gray-900 rounded-full w-fit  p-4 transition-all">
               <FaXTwitter />
             </div>
@@ -114,21 +111,26 @@ const TwitterLayout: React.FC<TwitterLayoutProps> = (props) => {
             <button className="p-4  text-xl lg:hidden  bg-[#1b8eeb] hover:bg-[#1b8debec] rounded-full  transition-all font-bold cursor-pointer">
               <FaXTwitter />
             </button>
-            <div className="pt-4">
-              <AnimatedTooltip
-                items={[
-                  {
-                    id: 1,
-                    name: `${user?.firstName + " " + user?.lastName}`,
-                    designation: "User",
-                    image: user?.profileImageUrl as string,
-                  },
-                ]}
-              />
-             
+            {user && (
+              <div className="p-0   lg:p-1 lg:pr-4  lg:bg-gray-900 rounded-full my-4 flex  justify-between items-center">
+                <AnimatedTooltip
+                  items={[
+                    {
+                      id: 1,
+                      name: `${user?.firstName + " " + user?.lastName}`,
+                      designation: "User",
+                      image: user?.profileImageUrl as string,
+                    },
+                  ]}
+                  />
+
+                <h1 className=" font-semibold hidden lg:inline-block">
+                  {user?.firstName + " " + user?.lastName}
+                </h1>
+              </div>
+            )}
             </div>
           </div>
-        </div>
         <div className=" col-span-10 sm:col-span-6 ">{props.children}</div>
         {!user && (
           <div className="col-span-0 sm:col-span-3">

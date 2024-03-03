@@ -49,11 +49,13 @@ export default function Tweets() {
   const [imageURL, setImageURL] = React.useState("");
   const { user } = useCurrentUser();
   const { tweets = [] } = useGetAllTweetsQuery();
-  const { mutate } = useCreateTweet();
+  const { mutateAsync } = useCreateTweet();
 
-  const handleClickTweet = useCallback(() => {
-    mutate({ content});
-  }, [content, mutate]);
+  const handleClickTweet = useCallback(async() => {
+    await mutateAsync({ content, imageUrl: imageURL});
+    setContent("");
+    setImageURL("");
+  }, [content, mutateAsync, imageURL]);
   const handleImageUpload = useCallback((input: HTMLInputElement) => {
     
     return async (event: Event) => {
@@ -120,7 +122,7 @@ export default function Tweets() {
             placeholder={"What is happening?"}
           ></textarea>
           {imageURL && (
-            <div className="relative h-40 w-full">
+            <div className="relative h-screen w-full">
               <Image
                 src={imageURL}
                 layout="fill"

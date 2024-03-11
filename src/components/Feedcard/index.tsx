@@ -19,6 +19,7 @@ import {
 import { toast } from "sonner";
 import { graphql } from "../../../gql";
 import { useDeleteTweet } from "../../../hooks/tweet";
+import { useCurrentUser } from "../../../hooks/user";
 
 const TwitterFeedButtons: TwitterFeedButton[] = [
   {
@@ -53,6 +54,7 @@ interface FeedCardProps {
 const Feedcard: React.FC<FeedCardProps> = (props) => {
   const { data } = props;
   const {mutateAsync} = useDeleteTweet();
+  const {user} = useCurrentUser()
   const [isOpen, setIsOpen] = React.useState(false);
   function closeModal() {
     setIsOpen(false);
@@ -96,8 +98,11 @@ const Feedcard: React.FC<FeedCardProps> = (props) => {
                   <FiMoreHorizontal />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem onClick={openModal}>
+                  {user?.id=== data?.author.id && <DropdownMenuItem onClick={openModal}>
                     <h1 className="text-red-600">Delete</h1>
+                  </DropdownMenuItem>}
+                  <DropdownMenuItem >
+                    <h1 className="">Edit</h1>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

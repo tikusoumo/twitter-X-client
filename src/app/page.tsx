@@ -11,7 +11,7 @@ export default function Home() {
 
   return (
     <>
-      <TwitterLayout >
+      <TwitterLayout  >
         <Tweets  />
       </TwitterLayout>
       <Toaster richColors position="bottom-center" />

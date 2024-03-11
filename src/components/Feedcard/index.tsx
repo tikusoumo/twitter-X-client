@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { Fragment } from "react";
+import React, { Fragment, use } from "react";
 import { BiMessageRoundedDots } from "react-icons/bi";
 import { FaRetweet } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
@@ -16,6 +16,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { toast } from "sonner";
+import { graphql } from "../../../gql";
+import { useDeleteTweet } from "../../../hooks/tweet";
 
 const TwitterFeedButtons: TwitterFeedButton[] = [
   {
@@ -30,13 +33,13 @@ const TwitterFeedButtons: TwitterFeedButton[] = [
     icon: <FaRegHeart />,
     label: "Like",
   },
-  {
-    icon: <LuBarChart2 />,
-    label: "analytics",
-  },
+  // {
+  //   icon: <LuBarChart2 />,
+  //   label: "analytics",
+  // },
   {
     icon: <PiUploadSimpleBold />,
-    label: "Upload",
+    label: "Share",
   },
 ];
 
@@ -49,6 +52,7 @@ interface FeedCardProps {
 }
 const Feedcard: React.FC<FeedCardProps> = (props) => {
   const { data } = props;
+  const {mutateAsync} = useDeleteTweet();
   const [isOpen, setIsOpen] = React.useState(false);
   function closeModal() {
     setIsOpen(false);
@@ -56,6 +60,13 @@ const Feedcard: React.FC<FeedCardProps> = (props) => {
 
   function openModal() {
     setIsOpen(true);
+  }
+  const handlePostDelete = () =>{
+    closeModal()
+    mutateAsync(data.id)
+    
+   
+    console.log("delete")
   }
 
   return (
@@ -154,7 +165,7 @@ const Feedcard: React.FC<FeedCardProps> = (props) => {
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      It will permanently delete
+                      It will permanently deleted
                     </p>
                   </div>
 
@@ -162,7 +173,7 @@ const Feedcard: React.FC<FeedCardProps> = (props) => {
                     <button
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}
+                      onClick={handlePostDelete}
                     >
                       Delete
                     </button>

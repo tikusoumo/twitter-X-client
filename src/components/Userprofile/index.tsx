@@ -93,7 +93,7 @@ const UserProfilePage: NextPage<ServerProps> = (props) => {
             <>
               {amIFollowing ? (
                 <button
-                  className="px-4 py-2 bg-gray-200 rounded-full text-gray-900  text-sm font-semibold"
+                  className="px-4 py-2 bg-gray-200 rounded-full text-gray-900  text-sm font-semibold hover:bg-red-600 hover:text-red-300 transition-all ease-in-out"
                   onClick={handleUnFollowUser}
                 >
                   Unfollow

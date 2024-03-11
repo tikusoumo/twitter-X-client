@@ -6,5 +6,12 @@ export const createTweetMutation = graphql(/*graphql*/`
     createTweet(payload: $payload) {
       id
     }
+
   }
+`);
+
+export const deleteTweetMutation = graphql(/*graphql*/`
+  mutation DeleteTweet($deleteTweetId: ID!) {
+  deleteTweet(id: $deleteTweetId)
+}
 `);

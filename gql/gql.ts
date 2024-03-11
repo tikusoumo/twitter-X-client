@@ -13,7 +13,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  \n  mutation CreateTweet($payload: CreateTweetInput!) {\n    createTweet(payload: $payload) {\n      id\n    }\n  }\n": types.CreateTweetDocument,
+    "\n  \n  mutation CreateTweet($payload: CreateTweetInput!) {\n    createTweet(payload: $payload) {\n      id\n    }\n\n  }\n": types.CreateTweetDocument,
+    "\n  mutation DeleteTweet($deleteTweetId: ID!) {\n  deleteTweet(id: $deleteTweetId)\n}\n": types.DeleteTweetDocument,
     "\n  mutation FollowUser($to: ID!) {\n    followUser(to: $to)\n  }\n": types.FollowUserDocument,
     "\n  mutation UnfollowUser($to: ID!) {\n    unfollowUser(to: $to)\n  }\n": types.UnfollowUserDocument,
     "\n  #graphql\n  query GetAllTweets {\n    getAllTweets {\n      id\n      content\n      imageUrl\n      author {\n        id\n        firstName\n        lastName\n        profileImageUrl\n      }\n    }\n  }\n": types.GetAllTweetsDocument,
@@ -40,7 +41,11 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  \n  mutation CreateTweet($payload: CreateTweetInput!) {\n    createTweet(payload: $payload) {\n      id\n    }\n  }\n"): (typeof documents)["\n  \n  mutation CreateTweet($payload: CreateTweetInput!) {\n    createTweet(payload: $payload) {\n      id\n    }\n  }\n"];
+export function graphql(source: "\n  \n  mutation CreateTweet($payload: CreateTweetInput!) {\n    createTweet(payload: $payload) {\n      id\n    }\n\n  }\n"): (typeof documents)["\n  \n  mutation CreateTweet($payload: CreateTweetInput!) {\n    createTweet(payload: $payload) {\n      id\n    }\n\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation DeleteTweet($deleteTweetId: ID!) {\n  deleteTweet(id: $deleteTweetId)\n}\n"): (typeof documents)["\n  mutation DeleteTweet($deleteTweetId: ID!) {\n  deleteTweet(id: $deleteTweetId)\n}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

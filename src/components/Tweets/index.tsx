@@ -51,13 +51,12 @@ export default function Tweets() {
   const { tweets = [] } = useGetAllTweetsQuery();
   const { mutateAsync } = useCreateTweet();
 
-  const handleClickTweet = useCallback(async() => {
-    await mutateAsync({ content, imageUrl: imageURL});
+  const handleClickTweet = useCallback(async () => {
+    await mutateAsync({ content, imageUrl: imageURL });
     setContent("");
     setImageURL("");
   }, [content, mutateAsync, imageURL]);
   const handleImageUpload = useCallback((input: HTMLInputElement) => {
-    
     return async (event: Event) => {
       event.preventDefault();
       const file: File | null | undefined = input.files?.[0];

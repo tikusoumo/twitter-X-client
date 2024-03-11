@@ -86,13 +86,13 @@ const TwitterLayout: React.FC<TwitterLayoutProps> = (props) => {
 
   return (
     <>
-      <div className="grid grid-cols-12  h-screen w-screen overflow-x-hidden ">
+      <div className="grid grid-cols-12  h-screen w-screen overflow-x-hidden  ">
         <div className="col-span-2 sm:col-span-3 flex sm:justify-end  ">
           <div className="pr-4 ">
             <div className=" text-3xl hover:bg-gray-900 rounded-full w-fit  p-4 transition-all">
               <FaXTwitter />
             </div>
-            <ul className="">
+            <ul className="my-1">
               {TwitterSidebarButtons.map((button) => (
                 <li key={button.title}>
                   <Link
@@ -122,16 +122,18 @@ const TwitterLayout: React.FC<TwitterLayoutProps> = (props) => {
                       image: user?.profileImageUrl as string,
                     },
                   ]}
-                  />
+                />
 
                 <h1 className=" font-semibold hidden lg:inline-block">
                   {user?.firstName + " " + user?.lastName}
                 </h1>
               </div>
             )}
-            </div>
           </div>
-        <div className=" col-span-10 sm:col-span-6 ">{props.children}</div>
+        </div>
+        <div className=" col-span-10 sm:col-span-6 overflow-y-scroll no-scrollbar">
+          {props.children}
+          </div>
         {!user && (
           <div className="col-span-0 sm:col-span-3">
             <h1>New to Twitter?</h1>

@@ -9,6 +9,7 @@ import { Tweet } from "../../../gql/graphql";
 import Link from "next/link";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { Dialog, Transition } from "@headlessui/react";
+import { FaHeart } from "react-icons/fa";
 
 import {
   DropdownMenu,
@@ -17,32 +18,9 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { toast } from "sonner";
-import { graphql } from "../../../gql";
 import { useDeleteTweet } from "../../../hooks/tweet";
 import { useCurrentUser } from "../../../hooks/user";
 
-const TwitterFeedButtons: TwitterFeedButton[] = [
-  {
-    icon: <BiMessageRoundedDots />,
-    label: "Tweet",
-  },
-  {
-    icon: <FaRetweet />,
-    label: "Retweet",
-  },
-  {
-    icon: <FaRegHeart />,
-    label: "Like",
-  },
-  // {
-  //   icon: <LuBarChart2 />,
-  //   label: "analytics",
-  // },
-  {
-    icon: <PiUploadSimpleBold />,
-    label: "Share",
-  },
-];
 
 interface TwitterFeedButton {
   icon: React.ReactNode;
@@ -53,23 +31,64 @@ interface FeedCardProps {
 }
 const Feedcard: React.FC<FeedCardProps> = (props) => {
   const { data } = props;
-  const {mutateAsync} = useDeleteTweet();
-  const {user} = useCurrentUser()
+  const { mutateAsync } = useDeleteTweet();
+  const { user } = useCurrentUser();
   const [isOpen, setIsOpen] = React.useState(false);
-  function closeModal() {
+  const [isCommentOpen, setIsCommentOpen] = React.useState(false);
+  const [isLiked, setIsLiked] = React.useState(false);
+  const TwitterFeedButtons: TwitterFeedButton[] = [
+    {
+      icon: <BiMessageRoundedDots />,
+      label: "Tweet",
+    },
+    {
+      icon: <FaRetweet />,
+      label: "Retweet",
+    },
+    {
+      icon: <FaRegHeart />,
+      label: "Like",
+    },
+    // {
+    //   icon: <LuBarChart2 />,
+    //   label: "analytics",
+    // },
+    {
+      icon: <PiUploadSimpleBold />,
+      label: "Share",
+    },
+  ];
+  function closeDeleteModal() {
     setIsOpen(false);
   }
 
-  function openModal() {
+  function openDeleteModal() {
     setIsOpen(true);
   }
-  const handlePostDelete = () =>{
-    closeModal()
-    mutateAsync(data.id)
-    
-   
-    console.log("delete")
+  function opemCommentModal() {
+    setIsCommentOpen(true);
   }
+  function closeCommentModal() {
+    setIsCommentOpen(false);
+  }
+  const handlePostDelete = () => {
+    closeDeleteModal();
+    mutateAsync(data.id);
+
+    console.log("delete");
+  };
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+  };
+  const handleComment = () => {
+    
+  };
+
+  let heartLike = isLiked ? (
+    <FaHeart className="text-red-600" />
+  ) : (
+    <FaRegHeart className="text-gray-100" />
+  );
 
   return (
     <>
@@ -98,10 +117,12 @@ const Feedcard: React.FC<FeedCardProps> = (props) => {
                   <FiMoreHorizontal />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  {user?.id=== data?.author.id && <DropdownMenuItem onClick={openModal}>
-                    <h1 className="text-red-600">Delete</h1>
-                  </DropdownMenuItem>}
-                  <DropdownMenuItem >
+                  {user?.id === data?.author.id && (
+                    <DropdownMenuItem onClick={openDeleteModal}>
+                      <h1 className="text-red-600">Delete</h1>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem>
                     <h1 className="">Edit</h1>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -129,15 +150,29 @@ const Feedcard: React.FC<FeedCardProps> = (props) => {
                 index !== 2
                   ? "hover:bg-gray-800 hover:text-sky-500"
                   : "hover:bg-red-500 hover:bg-opacity-20 hover:text-red-600"
-              } rounded-full  transition-all`}
+              } hover:scale-105 rounded-full  transition-all ease-in-out duration-300`}
+              onClick={() => {
+                index === 2
+                  ? handleLike()
+                  : index === 0
+                  ? opemCommentModal()
+                  : index === 1
+                  ? toast("Retweet")
+                  : index === 3
+                  ? toast("Share")
+                  : toast("Analytics");
+              }}
             >
-              <div className="flex items-center  ">{button.icon}</div>
+              <div className="flex items-center ">
+                {index === 2 ? heartLike : button.icon}
+              </div>
             </div>
           ))}
         </div>
       </div>
+      {/* delete modal */}
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className="relative z-10" onClose={closeDeleteModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -150,7 +185,7 @@ const Feedcard: React.FC<FeedCardProps> = (props) => {
             <div className="fixed inset-0 bg-black/25" />
           </Transition.Child>
 
-          <div className="fixed inset-0 overflow-y-auto">
+          <div className="fixed inset-0 overflow-y-auto bg-opacity-80 bg-black">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
               <Transition.Child
                 as={Fragment}
@@ -166,7 +201,7 @@ const Feedcard: React.FC<FeedCardProps> = (props) => {
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                   Are You Sure?
+                    Are You Sure?
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
@@ -189,6 +224,60 @@ const Feedcard: React.FC<FeedCardProps> = (props) => {
           </div>
         </Dialog>
       </Transition>
+      {/* comment modal */}
+      <Transition appear show={isCommentOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10 " onClose={closeCommentModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto bg-opacity-80 bg-black">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                  >
+                    Post Your reply
+                  </Dialog.Title>
+                  <div className="mt-2">
+                   
+                    <textarea className="text-black border rounded-lg w-full p-1 px-2"></textarea>
+                  </div>
+
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-sky-100 px-4 py-2 text-sm font-medium text-sky-900 hover:bg-sky-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+                      onClick={handleComment}
+                    >
+                      Post
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+      
     </>
   );
 };
